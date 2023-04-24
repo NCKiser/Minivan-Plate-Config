@@ -1,59 +1,64 @@
-<head>
-</head>
-<body>
-  <label for="Layout">Choose a PCB/Layout:</label>
+<html>
+  <head>
+    <title>MiniVanPlate.xyz</title>
+    <link rel="stylesheet" href="stylesheet.css">
+  </head>
+  <body>
+    <label for="Layout">Choose a PCB/Layout:</label>
 
-  <select name="Layout" id="Layout" onchange="dropdown_update()">
-    <option value="MiniVan_Universal">MiniVan Universal</option>
-    <option value="Minisub">Minisub</option>
-    <option value="MiniVan_Universal">Monorail Diesel (MiniVan Universal)</option>
-    <option value="Monorail_Steam">Monorail Steam</option>
-    <option value="Minisub">Monorail Jet (Minisub)</option>
-  </select>
+    <select name="Layout" id="Layout" onchange="dropdown_update()">
+      <option value="MiniVan_Universal">MiniVan Universal</option>
+      <option value="Minisub">Minisub</option>
+      <option value="MiniVan_Universal">Monorail Diesel (MiniVan Universal)</option>
+      <option value="Monorail_Steam">Monorail Steam</option>
+      <option value="Minisub">Monorail Jet (Minisub)</option>
+    </select>
 
-  <br>
+    <br>
 
-  <label for="Case">Choose a Case:</label>
+    <label for="Case">Choose a Case:</label>
 
-  <select name="Case" id="Case" onchange="dropdown_update()">
+    <select name="Case" id="Case" onchange="dropdown_update()">
+      
+      <option value="Tray">Tray</option>
+      <option value="Tray">PCrack (Tray)</option>
+      <option value="Tray">Plastic MiniVan (Tray)</option>
+      <option value="Tray">MFR (Tray)</option>
+      <option value="Hull">Hull</option>
+      <option value="Hull">Dinghy (Hull)</option>
+      <option value="Hull">Knuckhull (Hull)</option>
+      <option value="Hull">Pomelo (Hull)</option>
+      <option value="Hull">Pomelo/Carpool (Hull)</option>
+      <option value="Coriander">Coriander</option>
+      <option value="Coriander">Barca (Coriander)</option>
+      <option value="Coriander">Pomelo (Coriander)</option>
+      <option value="Coriander">Carpool (Coriander)</option>
+      <option value="Coriander">Hubris (Coriander)</option>
+      <option value="Campsite">Campsite</option>
+      <option value="Campiander">Campiander</option>
+    </select>
+
+    <br>
+    <br>
+
+    <header>
+      <a href="all_dxf/" id="Download"></a>
+    </header>
     
-    <option value="Tray">Tray</option>
-    <option value="Tray">PCrack (Tray)</option>
-    <option value="Tray">Plastic MiniVan (Tray)</option>
-    <option value="Tray">MFR (Tray)</option>
-    <option value="Hull">Hull</option>
-    <option value="Hull">Dinghy (Hull)</option>
-    <option value="Hull">Knuckhull (Hull)</option>
-    <option value="Hull">Pomelo (Hull)</option>
-    <option value="Hull">Pomelo/Carpool (Hull)</option>
-    <option value="Coriander">Coriander</option>
-    <option value="Coriander">Barca (Coriander)</option>
-    <option value="Coriander">Pomelo (Coriander)</option>
-    <option value="Coriander">Carpool (Coriander)</option>
-    <option value="Coriander">Hubris (Coriander)</option>
-    <option value="Campsite">Campsite</option>
-  </select>
 
-  <br>
-  <br>
+    </p>
+  </body>
+  <script>
+    function dropdown_update(){
+      var layout_sel = document.getElementById("Layout");
+      var case_sel = document.getElementById("Case");
+      var selection = layout_sel.value + "_" + case_sel.value + ".dxf"
+      console.log(selection);
 
-  <header>
-    <a href="all_dxf/" id="Download"></a>
-  </header>
-  
+      document.getElementById("Download").setAttribute('href', "all_dxf/"+selection);
+      document.getElementById("Download").innerHTML = "<button>Download "+selection+"</button>";
+    }
 
-  </p>
-</body>
-<script>
-  function dropdown_update(){
-    var layout_sel = document.getElementById("Layout");
-    var case_sel = document.getElementById("Case");
-    var selection = layout_sel.value + "_" + case_sel.value + ".dxf"
-    console.log(selection);
-
-    document.getElementById("Download").setAttribute('href', "all_dxf/"+selection);
-    document.getElementById("Download").innerHTML = "<button>Download "+selection+"</button>";
-  }
-
-  dropdown_update()
-</script>
+    dropdown_update()
+  </script>
+</html>

@@ -1,0 +1,26 @@
+select, button {
+    display: block;
+    margin: 0 auto;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+select {
+    width: 200px;
+}
+
+button {
+    width: 100px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #3e8e41;
+}
+
+body {
+    text-align: center;
+}
