@@ -21,6 +21,11 @@ button:hover {
     background-color: #3e8e41;
 }
 
+a {
+    text-decoration:none;
+}
+
 body {
     text-align: center;
+    margin: 10% auto;
 }
