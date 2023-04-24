@@ -34,8 +34,7 @@
       <option value="Coriander">Pomelo (Coriander)</option>
       <option value="Coriander">Carpool (Coriander)</option>
       <option value="Coriander">Hubris (Coriander)</option>
-      <option value="Campsite">Campsite</option>
-      <option value="Campiander">Campiander</option>
+      <option value="Campiander">Campiander (Campsite + Coriander)</option>
     </select>
 
     <br>
@@ -53,10 +52,20 @@
       var layout_sel = document.getElementById("Layout");
       var case_sel = document.getElementById("Case");
       var selection = layout_sel.value + "_" + case_sel.value + ".dxf"
+      var dxf_url = "all_dxf/"+selection
       console.log(selection);
-
-      document.getElementById("Download").setAttribute('href', "all_dxf/"+selection);
+      LinkCheck(dxf_url)
+      document.getElementById("Download").setAttribute('href', dxf_url);
       document.getElementById("Download").innerHTML = "<button>Download "+selection+"</button>";
+    }
+
+    function LinkCheck(url)
+    {
+      var http = new XMLHttpRequest();
+      http.open('HEAD', url, false);
+      http.send();
+      console.log(http.status!=404)
+      return http.status!=404;
     }
 
     dropdown_update()
