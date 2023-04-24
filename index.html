@@ -25,7 +25,7 @@
     <option value="Hull">Dinghy (Hull)</option>
     <option value="Hull">Knuckhull (Hull)</option>
     <option value="Hull">Pomelo (Hull)</option>
-    <option value="Hull">Carpool (Hull)</option>
+    <option value="Hull">Pomelo/Carpool (Hull)</option>
     <option value="Coriander">Coriander</option>
     <option value="Coriander">Barca (Coriander)</option>
     <option value="Coriander">Pomelo (Coriander)</option>
@@ -38,8 +38,9 @@
   <br>
 
   <header>
-    <a href="all_dxf/" id="Download">Download Plate .dxf</a>
+    <a href="all_dxf/" id="Download"></a>
   </header>
+  
 
   </p>
 </body>
@@ -51,7 +52,7 @@
     console.log(selection);
 
     document.getElementById("Download").setAttribute('href', "all_dxf/"+selection);
-    document.getElementById("Download").innerHTML = "Download "+selection;
+    document.getElementById("Download").innerHTML = "<button>Download "+selection+"</button>";
   }
 
   dropdown_update()
