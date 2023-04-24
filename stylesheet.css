@@ -29,7 +29,7 @@ button.download_disabled {
     cursor: default;
 }
 
-a {
+a.download {
     text-decoration:none;
 }
 
