@@ -7,8 +7,9 @@
     <label for="Layout">Choose a PCB/Layout:</label>
 
     <select name="Layout" id="Layout" onchange="dropdown_update()">
-      <option value="MiniVan_Universal">MiniVan Universal</option>
+      <option value="Ketch">Ketch</option>
       <option value="Minisub">Minisub</option>
+      <option value="MiniVan_Universal">MiniVan Universal</option>
       <option value="MiniVan_Universal">Monorail Diesel (MiniVan Universal)</option>
       <option value="Monorail_Steam">Monorail Steam</option>
       <option value="Minisub">Monorail Jet (Minisub)</option>
@@ -16,7 +17,7 @@
 
     <br>
 
-    <label for="Case">Choose a Case:</label>
+    <label for="Case">Choose a Case/Mount:</label>
 
     <select name="Case" id="Case" onchange="dropdown_update()">
       
@@ -34,9 +35,9 @@
       <option value="Coriander">&emsp;Pomelo (Coriander)</option>
       <option value="Coriander">&emsp;Carpool (Coriander)</option>
       <option value="Coriander">&emsp;Hubris (Coriander)</option>
-      <option value="Campiander">Campiander-Mount</option>
-      <option value="Campiander">&emsp;Campsite (Campiander)</option>
-      <option value="Campiander">&emsp;Coriander (Campiander)</option>
+      <option value="Campsite">Campsite-Mount</option>
+      <option value="Campsite">&emsp;Campsite</option>
+      <option value="Campiander">&emsp;Campiander (Campsite + Coriander)</option>
     </select>
 
     <br>
@@ -56,8 +57,8 @@
       var selection = layout_sel.value + "_" + case_sel.value + ".dxf"
       var dxf_url = "all_dxf/"+selection
       console.log(selection);
-      //if (LinkCheck(dxf_url)==true) {
-      if (true) {
+      if (LinkCheck(dxf_url)==true) {
+      //if (true) {
         document.getElementById("Download").setAttribute('href', dxf_url);
         document.getElementById("Download").setAttribute('style', "");
         document.getElementById("Download").innerHTML = "<button class=\"download_enabled\">Download "+selection+"</button>";
