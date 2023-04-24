@@ -20,21 +20,23 @@
 
     <select name="Case" id="Case" onchange="dropdown_update()">
       
-      <option value="Tray">Tray</option>
-      <option value="Tray">PCrack (Tray)</option>
-      <option value="Tray">Plastic MiniVan (Tray)</option>
-      <option value="Tray">MFR (Tray)</option>
-      <option value="Hull">Hull</option>
-      <option value="Hull">Dinghy (Hull)</option>
-      <option value="Hull">Knuckhull (Hull)</option>
-      <option value="Hull">Pomelo (Hull)</option>
-      <option value="Hull">Pomelo/Carpool (Hull)</option>
-      <option value="Coriander">Coriander</option>
-      <option value="Coriander">Barca (Coriander)</option>
-      <option value="Coriander">Pomelo (Coriander)</option>
-      <option value="Coriander">Carpool (Coriander)</option>
-      <option value="Coriander">Hubris (Coriander)</option>
-      <option value="Campiander">Campsite + Coriander = Campiander</option>
+      <option value="Tray">Tray-Mount</option>
+      <option value="Tray">&emsp;PCrack (Tray)</option>
+      <option value="Tray">&emsp;Plastic MiniVan (Tray)</option>
+      <option value="Tray">&emsp;MFR (Tray)</option>
+      <option value="Hull">Hull-Mount</option>
+      <option value="Hull">&emsp;Dinghy (Hull)</option>
+      <option value="Hull">&emsp;Knuckhull (Hull)</option>
+      <option value="Hull">&emsp;Pomelo (Hull)</option>
+      <option value="Hull">&emsp;Carpool (Hull)</option>
+      <option value="Coriander">Coriander-Mount</option>
+      <option value="Coriander">&emsp;Barca (Coriander)</option>
+      <option value="Coriander">&emsp;Pomelo (Coriander)</option>
+      <option value="Coriander">&emsp;Carpool (Coriander)</option>
+      <option value="Coriander">&emsp;Hubris (Coriander)</option>
+      <option value="Campiander">Campiander-Mount</option>
+      <option value="Campiander">&emsp;Campsite (Campiander)</option>
+      <option value="Campiander">&emsp;Coriander (Campiander)</option>
     </select>
 
     <br>
@@ -54,8 +56,8 @@
       var selection = layout_sel.value + "_" + case_sel.value + ".dxf"
       var dxf_url = "all_dxf/"+selection
       console.log(selection);
-      if (LinkCheck(dxf_url)==true) {
-      //if (true) {
+      //if (LinkCheck(dxf_url)==true) {
+      if (true) {
         document.getElementById("Download").setAttribute('href', dxf_url);
         document.getElementById("Download").setAttribute('style', "");
         document.getElementById("Download").innerHTML = "<button class=\"download_enabled\">Download "+selection+"</button>";
