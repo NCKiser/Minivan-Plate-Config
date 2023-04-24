@@ -54,9 +54,13 @@
       var selection = layout_sel.value + "_" + case_sel.value + ".dxf"
       var dxf_url = "all_dxf/"+selection
       console.log(selection);
-      LinkCheck(dxf_url)
-      document.getElementById("Download").setAttribute('href', dxf_url);
-      document.getElementById("Download").innerHTML = "<button>Download "+selection+"</button>";
+      if LinkCheck(dxf_url) {
+        document.getElementById("Download").setAttribute('href', dxf_url);
+        document.getElementById("Download").innerHTML = "<button>Download "+selection+"</button>";
+      } else {
+        document.getElementById("Download").setAttribute('href', "/");
+        document.getElementById("Download").innerHTML = "<button>File Not Available</button>";
+      }
     }
 
     function LinkCheck(url)
