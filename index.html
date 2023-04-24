@@ -55,11 +55,14 @@
       var dxf_url = "all_dxf/"+selection
       console.log(selection);
       if (LinkCheck(dxf_url)==true) {
+      //if (true) {
         document.getElementById("Download").setAttribute('href', dxf_url);
-        document.getElementById("Download").innerHTML = "<button>Download "+selection+"</button>";
+        document.getElementById("Download").setAttribute('style', "");
+        document.getElementById("Download").innerHTML = "<button class=\"download_enabled\">Download "+selection+"</button>";
       } else {
         document.getElementById("Download").setAttribute('href', "/");
-        document.getElementById("Download").innerHTML = "<button>File Not Available</button>";
+        document.getElementById("Download").setAttribute('style', "pointer-events: none;");
+        document.getElementById("Download").innerHTML = "<button class=\"download_disabled\">File Not Available</button>";
       }
     }
 

@@ -11,14 +11,22 @@ select {
 
 button {
     width: 400px;
-    background-color: #4CAF50;
     color: white;
     border: none;
+}
+
+button.download_enabled {
+    background-color: #4CAF50;
     cursor: pointer;
 }
 
-button:hover {
+button.download_enabled:hover {
     background-color: #3e8e41;
+}
+
+button.download_disabled {
+    background-color: #a04b4b;
+    cursor: default;
 }
 
 a {
