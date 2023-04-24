@@ -54,7 +54,7 @@
       var selection = layout_sel.value + "_" + case_sel.value + ".dxf"
       var dxf_url = "all_dxf/"+selection
       console.log(selection);
-      if LinkCheck(dxf_url) {
+      if (LinkCheck(dxf_url)=true) {
         document.getElementById("Download").setAttribute('href', dxf_url);
         document.getElementById("Download").innerHTML = "<button>Download "+selection+"</button>";
       } else {
