@@ -1,0 +1,30 @@
+name: Convert DXF to PNG
+on:
+  push:
+    paths:
+      - '${{ github.workspace }}/*.dxf'
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install DXF converter
+        run: sudo apt-get install -y librecad
+      - name: Convert DXF to PNG
+        run: |
+          mkdir -p converted
+          for file in ${{ github.workspace }}/*.dxf; do
+            if [ -f "$file" ]; then
+              convert -density 150 "$file" "converted/${file%.dxf}.png"
+            fi
+          done
+      - name: Move PNG files to folder
+        run: |
+          mkdir -p png
+          mv converted/*.png ${{ github.workspace }}/all_preview/
+      - name: Commit and push changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Convert DXF files to PNG"
