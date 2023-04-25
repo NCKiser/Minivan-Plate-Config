@@ -15,7 +15,7 @@ jobs:
       - name: Convert DXF to PNG
         run: |
           mkdir -p converted
-          for file in ${{ github.workspace }}/all_dxf/*.dxf; do
+          for file in all_dxf/*.dxf; do
             if [ -f "$file" ]; then
               convert -density 150 "$file" "converted/${file%.dxf}.png"
             fi
@@ -23,7 +23,7 @@ jobs:
       - name: Move PNG files to folder
         run: |
           mkdir -p png
-          mv converted/*.png ${{ github.workspace }}/all_preview/
+          mv converted/*.png all_preview/
       - name: Commit and push changes
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
