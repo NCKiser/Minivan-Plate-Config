@@ -5,18 +5,23 @@ import os
 def convert_dxf_to_png(input_file, output_file):
     dxf = ezdxf.readfile(input_file)
     msp = dxf.modelspace()
-    extmin, extmax = msp.max_limits()
-    width = int((extmax[0] - extmin[0]) * DPI)
-    height = int((extmax[1] - extmin[1]) * DPI)
-    dwg = ezdxf.new('AC1009')
-    image = ezdxf.render.Image((width, height), background=COLOR_BG)
-    dwg.modelspace().add_image(image, insert=(0, 0))
-    ms = dwg.modelspace()
-    ms.add_blockref('IMAGE', (0, 0))
-    ms.add_image_def('IMAGE', image=image, size_in_pixel=image.size, transparency=0)
-    dwg.saveas(output_file)
-
-
+    extmin, extmax = msp.get_extents()
+    width = abs(extmax[0] - extmin[0])
+    height = abs(extmax[1] - extmin[1])
+    png_width = 2048
+    png_height = int(height / width * png_width)
+    doc = freetype.Face(DEFAULT_FONT_PATH)
+    font_size = int(png_width / 30)
+    doc.set_char_size(size=font_size)
+    with open(output_file, 'wb') as png_file:
+        png_writer = png.Writer(png_width, png_height, greyscale=True)
+        pixels = []
+        for y in range(png_height):
+            for x in range(png_width):
+                p = get_point_from_pixel(x, y, png_width, png_height, extmin, extmax)
+                if p is not None:
+                    pixels.append(int(get_distance_to_nearest_entity(p, msp, doc) * 255))
+        png_writer.write_array(png_file, pixels)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
