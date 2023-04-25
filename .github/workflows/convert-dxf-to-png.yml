@@ -11,10 +11,16 @@ jobs:
         uses: actions/checkout@v2
       - name: Convert DXF to PNG
         run: |
-          for file in all_dxf/*.dxf; do
+          mkdir -p output
+          for file in dxf_files/*.dxf; do
             docker run --rm \
-              -v ${{ github.workspace }}/all_dxf:/workdir \
-              zbyue/dxf2png \
-              /workdir/$file \
-              /workdir/${file%.*}.png
+              -v ${{ github.workspace }}:/workdir \
+              librecad/librecad \
+              -x 0 -y 0 -z 1 -p 1 -b 1 \
+              "/workdir/$file" \
+              "/workdir/output/$(basename "${file%.*}").png"
           done
+      - name: Move PNG files to output directory
+        run: |
+          mkdir -p output
+          mv *.png output/
