@@ -29,7 +29,7 @@ class DXF2IMG(object):
                 fig = plt.figure()
                 ax = fig.add_axes([0, 0, 1, 1])
                 ctx = RenderContext(doc)
-                ctx.set_current_space_layout(msp)  # Use set_current_space_layout instead
+                ctx.set_current_layout(msp)  # Use set_current_space_layout instead
                 out = MatplotlibBackend(ax)
                 Frontend(ctx, out).draw_layout(msp, finalize=True)
 
