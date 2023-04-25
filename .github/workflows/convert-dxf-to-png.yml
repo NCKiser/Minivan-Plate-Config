@@ -15,6 +15,8 @@ jobs:
         python-version: 3.9
     - name: Install ezdxf
       run: pip install ezdxf Pillow
+    - name: Upgrade
+      run: pip install ezdxf --upgrade
     - name: Convert DXF to PNG
       run: |
         mkdir -p all_preview
