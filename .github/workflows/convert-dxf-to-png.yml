@@ -10,8 +10,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Install DXF converter
-        run: docker build --rm -t dxf2png .
       - name: Convert DXF to PNG
         run: |
           for file in $(find . -name 'all_data/*.dxf'); do
