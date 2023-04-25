@@ -16,7 +16,7 @@ class DXF2IMG(object):
 
     def convert_dxf2img(self, names):
         for name in names:
-            file_path = os.path.join('all_dxf', name)
+            file_path = name
             doc = ezdxf.readfile(file_path)
             msp = doc.modelspace()
             # Recommended: audit & repair DXF document before rendering
@@ -24,19 +24,21 @@ class DXF2IMG(object):
             # The auditor.errors attribute stores severe errors,
             # which *may* raise exceptions when rendering.
             if len(auditor.errors) != 0:
-                raise Exception("The DXF document is damaged and can't be converted!")
-            else:
+                raise exception("The DXF document is damaged and can't be converted!")
+            else :
                 fig = plt.figure()
                 ax = fig.add_axes([0, 0, 1, 1])
                 ctx = RenderContext(doc)
-                ctx.set_current_layout(msp)  # Use set_current_space_layout instead
+                ctx.set_current_layout(msp)  # Use set_current_layout instead
+                ctx.current_layout.set_colors(bg='#FFFFFF')  # No need to set colors on the current_layout
                 out = MatplotlibBackend(ax)
                 Frontend(ctx, out).draw_layout(msp, finalize=True)
 
-                img_name = re.findall("(\S+)\.", name)[0] + self.img_format  # select the image name that is the same as the dxf file name
-                img_path = os.path.join('all_preview', img_name)
-                fig.savefig(img_path, dpi=self.img_res)  # Save to 'all_preview' folder
-                print(f'{name} converted to {img_path}')
+                img_name = re.findall("(\S+)\.",os.path.basename(name))  # select the image name that is the same as the dxf file name
+                first_param = ''.join(img_name) + self.img_format  #concatenate list and string
+                fig.savefig(os.path.join('all_preview', first_param), dpi=self.img_res)  # Save to 'all_preview' folder
+
+
 
 if __name__ == '__main__':
     dxf_folder = 'all_dxf'
@@ -53,5 +55,5 @@ if __name__ == '__main__':
         # move the converted image to the preview folder
         img_name = re.findall("(\S+)\.", os.path.basename(dxf_file))[0] + converter.img_format
         img_path = os.path.join(img_folder, img_name)
-        shutil.move(os.path.join(os.getcwd(), img_name), img_path)
+        shutil.move(os.path.join(dxf_folder, img_name), img_path)
         print(f'{img_name} moved to {img_path}')
