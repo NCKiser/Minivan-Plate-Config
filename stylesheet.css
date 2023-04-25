@@ -35,5 +35,10 @@ a.download {
 
 body {
     text-align: center;
-    margin: 10% auto;
+    margin: 5% auto;
+}
+
+img#image-preview {
+    width: 800px;
+    margin-bottom: 40px;
 }
