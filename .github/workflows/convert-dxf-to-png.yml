@@ -12,7 +12,7 @@ jobs:
       - name: Convert DXF to PNG
         run: |
           mkdir -p output
-          for file in dxf_files/*.dxf; do
+          for file in all_dxf/*.dxf; do
             docker run --rm \
               -v ${{ github.workspace }}:/workdir \
               zbyue/dxf2png \
