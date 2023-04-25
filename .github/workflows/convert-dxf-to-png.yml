@@ -25,5 +25,5 @@ jobs:
 
       - name: Move PNG files to all_preview folder
         run: |
-          mkdir all_preview
+          mkdir -p all_preview
           mv *.png all_preview/
