@@ -9,21 +9,18 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-    - name: Install Python and dependencies
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.9
-    - name: Install ezdxf
-      run: pip install ezdxf Pillow
-    - name: Upgrade
-      run: pip install ezdxf --upgrade
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y python3-pip
+        pip3 install ezdxf Pillow
     - name: Convert DXF to PNG
       run: |
         mkdir -p all_preview
         for f in all_dxf/*.dxf; do
           filename=$(basename "$f" .dxf)
           if [ ! -f "all_preview/${filename}.png" ]; then
-            python dxf2png.py "$f" "all_preview/${filename}.png"
+            python3 dxf2png.py "$f" "all_preview/${filename}.png"
           else
             echo "File all_preview/${filename}.png already exists, skipping."
           fi
