@@ -3,54 +3,26 @@ import argparse
 import os
 
 def convert_dxf_to_png(input_file, output_file):
-    dxf = ezdxf.readfile(input_file)
-    modelspace = dxf.modelspace()
-
-    # Get bounding box
-    x_min, y_min, _, _ = modelspace.get_bbox()
-    _, _, x_max, y_max = modelspace.get_bbox()
-
-    # Set up image size
-    width = int((x_max - x_min) * SCALE_FACTOR)
-    height = int((y_max - y_min) * SCALE_FACTOR)
-
-    # Create the image
-    image = Image.new("RGBA", (width, height), (255, 255, 255, 0))
+    doc = ezdxf.readfile(input_file)
+    modelspace = doc.modelspace()
+    extmin = doc.header['$EXTMIN']
+    extmax = doc.header['$EXTMAX']
+    x_min, y_min = extmin[0], extmin[1]
+    x_max, y_max = extmax[0], extmax[1]
+    width, height = int((x_max - x_min) * SCALE), int((y_max - y_min) * SCALE)
+    image = Image.new("RGB", (width, height), (255, 255, 255))
     draw = ImageDraw.Draw(image)
 
-    # Draw the entities in the drawing
     for entity in modelspace:
         if entity.dxftype() == "LINE":
-            start = entity.dxf.start
-            end = entity.dxf.end
-            draw.line(
-                (
-                    (start[0] - x_min) * SCALE_FACTOR,
-                    height - (start[1] - y_min) * SCALE_FACTOR,
-                    (end[0] - x_min) * SCALE_FACTOR,
-                    height - (end[1] - y_min) * SCALE_FACTOR,
-                ),
-                fill=COLOR,
-                width=LINE_WIDTH,
-            )
-        elif entity.dxftype() == "LWPOLYLINE":
-            polyline = entity.get_points("xy")
-            for i in range(len(polyline) - 1):
-                start = polyline[i]
-                end = polyline[i + 1]
-                draw.line(
-                    (
-                        (start[0] - x_min) * SCALE_FACTOR,
-                        height - (start[1] - y_min) * SCALE_FACTOR,
-                        (end[0] - x_min) * SCALE_FACTOR,
-                        height - (end[1] - y_min) * SCALE_FACTOR,
-                    ),
-                    fill=COLOR,
-                    width=LINE_WIDTH,
-                )
+            start_point = entity.dxf.start
+            end_point = entity.dxf.end
+            start_point = ((start_point[0] - x_min) * SCALE, height - (start_point[1] - y_min) * SCALE)
+            end_point = ((end_point[0] - x_min) * SCALE, height - (end_point[1] - y_min) * SCALE)
+            draw.line([start_point, end_point], fill="black", width=2)
 
-    # Save the image
-    image.save(output_file)
+    image.save(output_file, "PNG")
+
 
 
 if __name__ == '__main__':
