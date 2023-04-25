@@ -1,35 +1,27 @@
-name: DXF to PNG Converter
-on:
-  push:
-    branches:
-      - main
+name: Convert DXF to PNG
+
+on: push
+
 jobs:
   convert:
     runs-on: ubuntu-latest
-    env:
-      QT_QPA_PLATFORM: offscreen
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Install librecad
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y librecad
-      - name: Convert DXF to PNG
-        run: |
-          mkdir -p all_preview
-          for file in all_dxf/*.dxf; do
-            filename=$(basename -- "$file")
-            extension="${filename##*.}"
-            filename="${filename%.*}"
-            if [ -f "all_preview/${filename}.png" ]; then
-              echo "Skipping ${filename}.png"
-            else
-              echo "Converting ${filename}.dxf to ${filename}.png"
-              librecad -x 0 -y 0 -z 1 -p 1 -b 1 "$file" "all_preview/${filename}.png"
-            fi
-          done
-      - name: Move PNG files to all_preview folder
-        run: |
-          mkdir -p all_preview
-          mv *.png all_preview/
+    - uses: actions/checkout@v2
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get -y install libcairo2-dev libpng-dev git
+    - name: Clone dxf2png repository
+      run: git clone https://github.com/iamjinlei/dxf2png.git
+    - name: Build dxf2png
+      run: |
+        docker build --rm -t dxf2png .
+    - name: Convert DXF to PNG
+      run: |
+        mkdir -p all_preview
+        for f in all_dxf/*.dxf; do
+          filename=$(basename -- "$f")
+          extension="${filename##*.}"
+          filename="${filename%.*}"
+          ./convert.sh "$f" "all_preview/${filename}.png"
+        done
