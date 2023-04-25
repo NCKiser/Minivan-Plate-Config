@@ -1,29 +1,37 @@
-name: Convert DXF to PNG
+name: Convert DXF to PNG and commit to repo
 
 on:
-  push
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  convert:
+  convert_dxf_to_png:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+    - uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install ezdxf matplotlib
 
-      - name: Convert DXF to PNG
-        run: python convert_dxf_to_png.py
+    - name: Convert DXF files to PNG
+      run: python convert_dxf_to_png.py all_dxf --img-format png --img-res 300
 
-      - name: Move PNG files to all_preview folder
-        run: |
-          mkdir -p all_preview
-          mv *.png all_preview/
+    - name: Commit PNG files
+      run: |
+        git config --global user.email "github-actions@github.com"
+        git config --global user.name "GitHub Actions"
+        git add all_preview/
+        git commit -m "Convert DXF files to PNG"
+        git push
