@@ -12,7 +12,7 @@ Plate previews are generated using https://github.com/Hamza442004/DXF2img, and s
 
 ## How to make more layouts
 
-Open the All_Plates.f3d file in Fusion360
+Open the ```/utils/All_Plates.f3d``` file in Fusion360
 
 Take the timeline marker to just before the last extrude.
 
