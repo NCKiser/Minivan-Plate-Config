@@ -11,19 +11,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Install DXF converter
-        run: sudo apt-get install -y librecad
+        run: docker build --rm -t dxf2png .
       - name: Convert DXF to PNG
         run: |
-          mkdir -p converted
-          for file in all_dxf/*.dxf; do
-            if [ -f "$file" ]; then
-              convert -density 150 "$file" "converted/${file%.dxf}.png"
-            fi
+          for file in $(find . -name 'all_data/*.dxf'); do
+            docker run --rm -v "$(pwd)":/data pavlobu/dxf2png /data/$file /data/${file%.*}.png
           done
       - name: Move PNG files to folder
         run: |
           mkdir -p png
-          mv converted/*.png all_preview/
+          mv /data/*.png all_preview/
       - name: Commit and push changes
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
