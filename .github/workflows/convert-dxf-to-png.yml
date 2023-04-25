@@ -15,8 +15,7 @@ jobs:
           for file in dxf_files/*.dxf; do
             docker run --rm \
               -v ${{ github.workspace }}:/workdir \
-              librecad/librecad \
-              -x 0 -y 0 -z 1 -p 1 -b 1 \
+              zbyue/dxf2png \
               "/workdir/$file" \
               "/workdir/output/$(basename "${file%.*}").png"
           done
