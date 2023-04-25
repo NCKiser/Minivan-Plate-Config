@@ -15,6 +15,7 @@ jobs:
       run: git clone https://github.com/iamjinlei/dxf2png.git
     - name: Build dxf2png
       run: |
+        cd dxf2png
         docker build --rm -t dxf2png .
     - name: Convert DXF to PNG
       run: |
