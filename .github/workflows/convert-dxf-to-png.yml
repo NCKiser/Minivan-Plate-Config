@@ -9,14 +9,21 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      - name: Install librecad
+        run: |
+          sudo add-apt-repository -y ppa:librecad-dev/librecad-daily
+          sudo apt-get update
+          sudo apt-get install -y librecad
       - name: Convert DXF to PNG
         run: |
-          mkdir -p output
+          mkdir -p all_preview
           for file in all_dxf/*.dxf; do
-            docker run --rm \
-              -v ${{ github.workspace }}/all_dxf:/workdir:ro \
-              -v ${{ github.workspace }}/output:/output \
-              miq42/dxf2png \
-              "/workdir/$file" \
-              "/output/$(basename "${file%.*}").png"
+            filename=$(basename -- "$file")
+            extension="${filename##*.}"
+            filename="${filename%.*}"
+            librecad -x 0 -y 0 -z 1 -p 1 -b 1 "$file" "all_preview/${filename}.png"
           done
+      - name: Move PNG files to all_preview directory
+        run: |
+          mkdir -p all_preview
+          mv *.png all_preview/
