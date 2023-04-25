@@ -23,7 +23,7 @@ jobs:
         OUTPUT_DIR: all_preview
     - name: Move PNG files
       run: |
-        mkdir -p "all_preview" # Create the output directory if it doesn't exist
+        mkdir "all_preview" # Create the output directory if it doesn't exist
         find "all_dxf" -name '*.dxf' | while read dxf_file; do
           png_file="all_preview/${dxf_file##*/}.png" # Construct the PNG file name based on the DXF file name
           if [ ! -f "$png_file" ]; then # Skip the file if the PNG file already exists
