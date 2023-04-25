@@ -1,9 +1,7 @@
 name: Convert DXF to PNG
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   convert:
@@ -11,19 +9,19 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-    - name: Install Rust
-      uses: actions-rs/toolchain@v1
+    - name: Install Python and dependencies
+      uses: actions/setup-python@v2
       with:
-        toolchain: stable
-        components: rustfmt
-    - name: Install dxf2image crate
-      run: cargo add dxf2image@0.1.0
+        python-version: 3.9
+    - name: Install ezdxf
+      run: pip install ezdxf
     - name: Convert DXF to PNG
       run: |
+        mkdir -p all_preview
         for f in all_dxf/*.dxf; do
           filename=$(basename "$f" .dxf)
           if [ ! -f "all_preview/${filename}.png" ]; then
-            dxf2image -i "$f" -o "all_preview/${filename}.png"
+            python dxf2png.py "$f" "all_preview/${filename}.png"
           else
             echo "File all_preview/${filename}.png already exists, skipping."
           fi
