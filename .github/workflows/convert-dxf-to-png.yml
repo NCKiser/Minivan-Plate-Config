@@ -13,15 +13,7 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y python3-pip
-        pip3 install ezdxf Pillow
+        pip3 install dxfgrabber Pillow
     - name: Convert DXF to PNG
       run: |
-        mkdir -p all_preview
-        for f in all_dxf/*.dxf; do
-          filename=$(basename "$f" .dxf)
-          if [ ! -f "all_preview/${filename}.png" ]; then
-            python3 dxf2png.py "$f" "all_preview/${filename}.png"
-          else
-            echo "File all_preview/${filename}.png already exists, skipping."
-          fi
-        done
+        python3 dxf2png.py
