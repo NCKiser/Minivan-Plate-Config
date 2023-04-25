@@ -22,9 +22,14 @@ jobs:
             filename=$(basename -- "$file")
             extension="${filename##*.}"
             filename="${filename%.*}"
-            librecad -x 0 -y 0 -z 1 -p 1 -b 1 "$file" "all_preview/${filename}.png"
+            if [ -f "all_preview/${filename}.png" ]; then
+              echo "Skipping ${filename}.png"
+            else
+              echo "Converting ${filename}.dxf to ${filename}.png"
+              librecad -x 0 -y 0 -z 1 -p 1 -b 1 "$file" "all_preview/${filename}.png"
+            fi
           done
-      - name: Move PNG files to all_preview directory
+      - name: Move PNG files to all_preview folder
         run: |
           mkdir -p all_preview
           mv *.png all_preview/
