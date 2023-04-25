@@ -16,7 +16,7 @@ jobs:
             docker run --rm \
               -v ${{ github.workspace }}/all_dxf:/workdir:ro \
               -v ${{ github.workspace }}/output:/output \
-              dxf2png \
+              zbyue/dxf2png \
               "/workdir/$file" \
               "/output/$(basename "${file%.*}").png"
           done
