@@ -14,28 +14,30 @@ class DXF2IMG(object):
         self.img_format = img_format
         self.img_res = img_res
 
-    def convert_dxf2img(self, dxf_file_path):
-        doc = ezdxf.readfile(dxf_file_path)
+    def convert_dxf2img(self, names, img_format=default_img_format, img_res=default_img_res):
+    for name in names:
+        file_path = os.path.join('all_dxf', name)
+        doc = ezdxf.readfile(file_path)
         msp = doc.modelspace()
         # Recommended: audit & repair DXF document before rendering
         auditor = doc.audit()
         # The auditor.errors attribute stores severe errors,
         # which *may* raise exceptions when rendering.
         if len(auditor.errors) != 0:
-            raise Exception("The DXF document is damaged and can't be converted!")
-        else:
+            raise exception("The DXF document is damaged and can't be converted!")
+        else :
             fig = plt.figure()
             ax = fig.add_axes([0, 0, 1, 1])
             ctx = RenderContext(doc)
-            ctx.set_current_layout(msp)
-            ctx.current_layout.set_colors(bg='#FFFFFF')
+            ctx.set_current_space_layout(msp)  # Use set_current_space_layout instead
+            ctx.current_layout.set_colors(bg='#FFFFFF')  # No need to set colors on the current_layout
             out = MatplotlibBackend(ax)
             Frontend(ctx, out).draw_layout(msp, finalize=True)
 
-            img_name = re.findall("(\S+)\.", os.path.basename(dxf_file_path))[0]  # select the image name that is the same as the dxf file name
-            img_path = os.path.join('all_preview', img_name + self.img_format)
-            fig.savefig(img_path, dpi=self.img_res)
-            plt.close(fig)
+            img_name = re.findall("(\S+)\.",name)  # select the image name that is the same as the dxf file name
+            first_param = ''.join(img_name) + img_format  #concatenate list and string
+            fig.savefig(os.path.join('all_preview', first_param), dpi=img_res)  # Save to 'all_preview' folder
+
 
 
 if __name__ == '__main__':
