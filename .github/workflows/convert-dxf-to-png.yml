@@ -14,7 +14,8 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install ezdxf pillow
+        pip install ezdxf
+        pip install Pillow==7.0.0
     - name: Convert DXF to PNG
       run: |
         python dxf_to_png.py all_dxf all_preview # Run the Python script, passing in the input and output directories
