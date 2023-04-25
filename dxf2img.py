@@ -47,12 +47,11 @@ if __name__ == '__main__':
 
     converter = DXF2IMG()
     for dxf_file in glob.glob(os.path.join(dxf_folder, '*.dxf')):
-        filename = os.path.basename(dxf_file)
-        converter.convert_dxf2img([filename])
-        print(f'{filename} converted to an image')
+        converter.convert_dxf2img([dxf_file])
+        print(f'{dxf_file} converted to an image')
 
         # move the converted image to the preview folder
-        img_name = re.findall("(\S+)\.", filename)[0] + converter.img_format
+        img_name = re.findall("(\S+)\.", os.path.basename(dxf_file))[0] + converter.img_format
         img_path = os.path.join(img_folder, img_name)
-        shutil.move(os.path.join('all_preview', img_name), img_path)
+        shutil.move(os.path.join(os.getcwd(), img_name), img_path)
         print(f'{img_name} moved to {img_path}')
