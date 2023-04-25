@@ -6,13 +6,21 @@ from ezdxf.addons.drawing import RenderContext, Frontend
 from ezdxf.addons.drawing.matplotlib import MatplotlibBackend
 import glob
 import re
+import os
 
 class DXF2IMG(object):
 
     default_img_format = '.png'
     default_img_res = 300
+
     def convert_dxf2img(self, names, img_format=default_img_format, img_res=default_img_res):
         for name in names:
+            # Check if a PNG file with the same name already exists in the 'all_preview' folder
+            png_name = os.path.join('all_preview', os.path.splitext(os.path.basename(name))[0] + img_format)
+            if os.path.isfile(png_name):
+                print(f'{png_name} already exists, skipping conversion...')
+                continue
+
             doc = ezdxf.readfile(name)
             msp = doc.modelspace()
             # Recommended: audit & repair DXF document before rendering
