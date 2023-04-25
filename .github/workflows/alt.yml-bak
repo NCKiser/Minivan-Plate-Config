@@ -2,7 +2,8 @@ name: Convert DXF to PNG
 
 on:
   push:
-    branches: [ main ]
+    paths:
+      - all_dxf/**
   
 jobs:
   dxf2png:
