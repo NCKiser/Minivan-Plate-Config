@@ -34,24 +34,24 @@ for dxf_file in os.listdir(input_dir):
     try:
         doc = ezdxf.readfile(dxf_path)
         msp = doc.modelspace()
-        extmin = msp.extmin
-        extmax = msp.extmax
-        width, height = int(abs(extmin[0]-extmax[0])), int(abs(extmin[1]-extmax[1]))
+        bbox = msp.bounding_box()
+        ext = (bbox[0], bbox[1])
+        width, height = int(abs(ext[0][0]-ext[1][0])), int(abs(ext[0][1]-ext[1][1]))
         img = Image.new('RGB', (width, height), color='white')
         img_draw = ImageDraw.Draw(img)
         for entity in msp:
             if entity.dxftype() == 'LINE':
                 start = entity.dxf.start
                 end = entity.dxf.end
-                img_draw.line([(start[0]-extmin[0], height - (start[1]-extmin[1])), 
-                                (end[0]-extmin[0], height - (end[1]-extmin[1]))], 
+                img_draw.line([(start[0]-ext[0][0], height - (start[1]-ext[0][1])), 
+                                (end[0]-ext[0][0], height - (end[1]-ext[0][1]))], 
                                 fill='black', width=1)
             elif entity.dxftype() == 'LWPOLYLINE':
                 for i in range(len(entity)):
                     start = entity[i - 1].dxf.end
                     end = entity[i].dxf.end
-                    img_draw.line([(start[0]-extmin[0], height - (start[1]-extmin[1])), 
-                                    (end[0]-extmin[0], height - (end[1]-extmin[1]))], 
+                    img_draw.line([(start[0]-ext[0][0], height - (start[1]-ext[0][1])), 
+                                    (end[0]-ext[0][0], height - (end[1]-ext[0][1]))], 
                                     fill='black', width=1)
         img.save(png_file)
     except ezdxf.DXFStructureError:
