@@ -1,34 +1,34 @@
 import ezdxf
-import argparse
-import os
+from PIL import Image
 
-def convert_dxf_to_png(input_file, output_file):
-    doc = ezdxf.readfile(input_file)
-    modelspace = doc.modelspace()
-    extmin = doc.header['$EXTMIN']
-    extmax = doc.header['$EXTMAX']
-    x_min, y_min = extmin[0], extmin[1]
-    x_max, y_max = extmax[0], extmax[1]
-    width, height = int((x_max - x_min) * SCALE), int((y_max - y_min) * SCALE)
-    image = Image.new("RGB", (width, height), (255, 255, 255))
-    draw = ImageDraw.Draw(image)
-
+def dxf_to_png(dxf_path, png_path):
+    # Load the DXF file using the ezdxf library
+    dwg = ezdxf.readfile(dxf_path)
+    
+    # Get the model space layout
+    modelspace = dwg.modelspace()
+    
+    # Get the extents of the drawing
+    extmin = modelspace.extmin
+    extmax = modelspace.extmax
+    
+    # Set the image size based on the drawing extents
+    width = int(extmax[0] - extmin[0])
+    height = int(extmax[1] - extmin[1])
+    
+    # Create a new image using the Pillow library
+    img = Image.new("RGB", (width, height), "white")
+    
+    # Draw the DXF entities onto the image
     for entity in modelspace:
         if entity.dxftype() == "LINE":
-            start_point = entity.dxf.start
-            end_point = entity.dxf.end
-            start_point = ((start_point[0] - x_min) * SCALE, height - (start_point[1] - y_min) * SCALE)
-            end_point = ((end_point[0] - x_min) * SCALE, height - (end_point[1] - y_min) * SCALE)
-            draw.line([start_point, end_point], fill="black", width=2)
+            start = (entity.dxf.start[0] - extmin[0], entity.dxf.start[1] - extmin[1])
+            end = (entity.dxf.end[0] - extmin[0], entity.dxf.end[1] - extmin[1])
+            imgdraw = ImageDraw.Draw(img)
+            imgdraw.line([start, end], fill="black", width=1)
+    
+    # Save the image as a PNG file
+    img.save(png_path)
 
-    image.save(output_file, "PNG")
-
-
-
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('input_file', help='path to input DXF file')
-    parser.add_argument('output_file', help='path to output PNG file')
-    args = parser.parse_args()
-
-    convert_dxf_to_png(args.input_file, args.output_file)
+# Example usage:
+dxf_to_png("example.dxf", "example.png")
