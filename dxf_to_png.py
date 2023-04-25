@@ -1,31 +1,53 @@
+import os
+import sys
 import ezdxf
 from PIL import Image
 
-def dxf_to_png(dxf_path, png_path):
-    # Load the DXF file using the ezdxf library
-    dwg = ezdxf.readfile(dxf_path)
+if len(sys.argv) != 3:
+    print(f"Usage: {sys.argv[0]} <input directory> <output directory>")
+    sys.exit(1)
+
+input_dir = sys.argv[1]
+output_dir = sys.argv[2]
+
+if not os.path.isdir(input_dir):
+    print(f"{input_dir} is not a directory")
+    sys.exit(1)
+
+if not os.path.isdir(output_dir):
+    print(f"{output_dir} is not a directory")
+    sys.exit(1)
+
+for dxf_file in os.listdir(input_dir):
+    if not dxf_file.endswith('.dxf'):
+        continue
     
-    # Get the model space layout
-    modelspace = dwg.modelspace()
-    
-    # Get the extents of the drawing
-    extmin = modelspace.extmin
-    extmax = modelspace.extmax
-    
-    # Set the image size based on the drawing extents
-    width = int(extmax[0] - extmin[0])
-    height = int(extmax[1] - extmin[1])
-    
-    # Create a new image using the Pillow library
-    img = Image.new("RGB", (width, height), "white")
-    
-    # Draw the DXF entities onto the image
-    for entity in modelspace:
-        if entity.dxftype() == "LINE":
-            start = (entity.dxf.start[0] - extmin[0], entity.dxf.start[1] - extmin[1])
-            end = (entity.dxf.end[0] - extmin[0], entity.dxf.end[1] - extmin[1])
-            imgdraw = ImageDraw.Draw(img)
-            imgdraw.line([start, end], fill="black", width=1)
-    
-    # Save the image as a PNG file
-    img.save(png_path)
+    png_file = os.path.join(output_dir, os.path.splitext(dxf_file)[0] + '.png')
+
+    if os.path.isfile(png_file):
+        print(f"{png_file} already exists, skipping...")
+        continue
+
+    dxf_path = os.path.join(input_dir, dxf_file)
+    print(f"Converting {dxf_path} to {png_file}")
+
+    try:
+        doc = ezdxf.readfile(dxf_path)
+        msp = doc.modelspace()
+        ext = msp.extents()
+        width, height = int(ext[0][0]), int(ext[0][1])
+        img = Image.new('RGB', (width, height), color='white')
+        img_draw = ImageDraw.Draw(img)
+        for entity in msp:
+            if entity.dxftype() == 'LINE':
+                start = entity.dxf.start
+                end = entity.dxf.end
+                img_draw.line([(start[0], height - start[1]), (end[0], height - end[1])], fill='black', width=1)
+            elif entity.dxftype() == 'LWPOLYLINE':
+                for i in range(len(entity)):
+                    start = entity[i - 1].dxf.end
+                    end = entity[i].dxf.end
+                    img_draw.line([(start[0], height - start[1]), (end[0], height - end[1])], fill='black', width=1)
+        img.save(png_file)
+    except Exception as e:
+        print(f"Error converting {dxf_path} to {png_file}: {str(e)}")
