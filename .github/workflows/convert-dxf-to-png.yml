@@ -1,9 +1,7 @@
 name: Convert DXF to PNG
 
 on:
-  push:
-    paths:
-      - 'all_dxf/**'
+  push
 
 jobs:
   convert:
