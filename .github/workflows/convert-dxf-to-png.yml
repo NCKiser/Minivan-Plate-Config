@@ -1,26 +1,29 @@
 name: Convert DXF to PNG
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
 jobs:
   convert:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Install dependencies
-      run: |
-        sudo apt-get update && \
-        sudo apt-get install -y libjpeg-dev libfreetype6-dev zlib1g-dev && \
-        pip install --user ezdxf pillow
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Install Rust and dxf2image crate
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        components: rustfmt
+      run: cargo install dxf2image
     - name: Convert DXF to PNG
       run: |
-        mkdir -p all_preview
-        for file in all_dxf/*.dxf
-        do
-          filename=$(basename -- "$file")
-          filename="${filename%.*}"
+        for f in all_dxf/*.dxf; do
+          filename=$(basename "$f" .dxf)
           if [ ! -f "all_preview/${filename}.png" ]; then
-            python3 -c "import ezdxf, sys; sys.stdout.buffer.write(ezdxf.zoom.extents_layout(sys.argv[1]).png())" "$file" > "all_preview/${filename}.png"
+            dxf2image -i "$f" -o "all_preview/${filename}.png"
+          else
+            echo "File all_preview/${filename}.png already exists, skipping."
           fi
         done
