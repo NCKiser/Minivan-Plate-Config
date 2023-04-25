@@ -2,29 +2,20 @@ import ezdxf
 import argparse
 import os
 
-def convert_dxf_to_png(input_file, output_file, width=800):
+def convert_dxf_to_png(input_file, output_file):
     dxf = ezdxf.readfile(input_file)
-    modelspace = dxf.modelspace()
-    extmax = dxf.header['$EXTMAX']
-    extmin = dxf.header['$EXTMIN']
-    x_min, y_min = extmin[0], extmin[1]
-    x_max, y_max = extmax[0], extmax[1]
-    width = int(width)
-    height = int(width * ((y_max-y_min)/(x_max-x_min)))
-    if height < 1:
-        height = 1
     msp = dxf.modelspace()
-    msp.transform_layout(msp.get_wcs_transformation() @ Matrix44.scale(sx=1.0, sy=1.0, sz=1.0))
-    fig = Figure()
-    ax = fig.add_axes([0, 0, 1, 1])
-    ax.set_xlim(x_min, x_max)
-    ax.set_ylim(y_min, y_max)
-    ax.axis('off')
-    ax.set_aspect('equal')
-    render = RenderContext(fig)
-    render.add(msp, by_layer=True)
-    result = Drawing.extract(render)
-    result.image().save(output_file)
+    extmin, extmax = msp.max_limits()
+    width = int((extmax[0] - extmin[0]) * DPI)
+    height = int((extmax[1] - extmin[1]) * DPI)
+    dwg = ezdxf.new('AC1009')
+    image = ezdxf.render.Image((width, height), background=COLOR_BG)
+    dwg.modelspace().add_image(image, insert=(0, 0))
+    ms = dwg.modelspace()
+    ms.add_blockref('IMAGE', (0, 0))
+    ms.add_image_def('IMAGE', image=image, size_in_pixel=image.size, transparency=0)
+    dwg.saveas(output_file)
+
 
 
 if __name__ == '__main__':
