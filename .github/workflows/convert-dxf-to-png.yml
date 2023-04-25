@@ -23,9 +23,9 @@ jobs:
         OUTPUT_DIR: all_preview
     - name: Move PNG files
       run: |
-        mkdir -p "${{ env.OUTPUT_DIR }}" # Create the output directory if it doesn't exist
-        find "${{ env.INPUT_DIR }}" -name '*.dxf' | while read dxf_file; do
-          png_file="${{ env.OUTPUT_DIR }}/${dxf_file##*/}.png" # Construct the PNG file name based on the DXF file name
+        mkdir -p "all_preview" # Create the output directory if it doesn't exist
+        find "all_dxf" -name '*.dxf' | while read dxf_file; do
+          png_file="all_preview/${dxf_file##*/}.png" # Construct the PNG file name based on the DXF file name
           if [ ! -f "$png_file" ]; then # Skip the file if the PNG file already exists
             python dxf_to_png.py "$dxf_file" "$png_file"
           fi
