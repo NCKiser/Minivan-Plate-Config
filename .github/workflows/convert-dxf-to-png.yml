@@ -1,33 +1,32 @@
-name: Convert DXF to PNG
+name: Convert DXF files to PNG
+
 on:
-  push
+  push:
+    branches:
+      - main
 
 jobs:
-  convert-dxf-to-png:
+  convert_dxf_to_png:
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v2 # Check out the repository
-    - name: Set up Python
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.x' # Use the latest version of Python 3
+        python-version: 3.x
+
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install ezdxf
-        pip install Pillow==7.0.0
-    - name: Convert DXF to PNG
+        pip install matplotlib ezdxf
+
+    - name: Convert DXF files to PNG
       run: |
-        python dxf_to_png.py all_dxf all_preview # Run the Python script, passing in the input and output directories
-      env:
-        INPUT_DIR: all_dxf
-        OUTPUT_DIR: all_preview
-    # - name: Move PNG files
-    #   run: |
-    #     mkdir -p "all_preview" # Create the output directory if it doesn't exist
-    #     find "all_dxf" -name '*.dxf' | while read dxf_file; do
-    #       png_file="all_preview/${dxf_file##*/}.png" # Construct the PNG file name based on the DXF file name
-    #       if [ ! -f "$png_file" ]; then # Skip the file if the PNG file already exists
-    #         python dxf_to_png.py "$dxf_file" "$png_file"
-    #       fi
-    #     done
+        python dxf2img.py
+
+    - name: Move PNG files to all_preview folder
+      run: |
+        mkdir all_preview
+        mv *.png all_preview/
