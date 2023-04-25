@@ -14,7 +14,7 @@ jobs:
           for file in all_dxf/*.dxf; do
             docker run --rm \
               -v ${{ github.workspace }}/all_dxf:/workdir \
-              pavlobu/dxf2png \
+              zbyue/dxf2png \
               /workdir/$file \
               /workdir/${file%.*}.png
           done
