@@ -49,6 +49,11 @@
     <br>
     <br>
 
+    <div>
+      <h4><span id="no-image-preview" style="display: none">No</span> Preview</h4>
+      <img id="image-preview" />
+    </div>
+
     <header>
       <a href="all_dxf/" id="Download" class="download"></a>
     </header>
@@ -74,10 +79,12 @@
         document.getElementById("Download").setAttribute('href', dxf_url);
         document.getElementById("Download").setAttribute('style', "");
         document.getElementById("Download").innerHTML = "<button class=\"download_enabled\">Download "+selection+"</button>";
+        document.getElementById('image-preview').setAttribute('src', getPreview(layout_sel.value, case_sel.value));
       } else {
         document.getElementById("Download").setAttribute('href', "/");
         document.getElementById("Download").setAttribute('style', "pointer-events: none;");
         document.getElementById("Download").innerHTML = "<button class=\"download_disabled\">File Not Available</button>";
+        document.getElementById('image-preview').setAttribute('src', getPreview());
       }
     }
 
@@ -88,6 +95,18 @@
       http.send();
       console.log(http.status!=404)
       return http.status!=404;
+    }
+
+    function getPreview(layout_sel, case_sel){
+      if (layout_sel && case_sel) {
+        document.getElementById('image-preview').style.display = '';
+        document.getElementById('no-image-preview').style.display = 'none';
+        let selection = `all_preview/${layout_sel}_${case_sel}.png`
+        return LinkCheck(selection) ? selection : 'https://placehold.co/800x200/white/grey?text=No Preview Available';
+      } else {
+        document.getElementById('image-preview').style.display = 'none';
+        document.getElementById('no-image-preview').style.display = '';
+      }
     }
 
     dropdown_update()
