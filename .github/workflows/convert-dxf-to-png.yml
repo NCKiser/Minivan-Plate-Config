@@ -16,7 +16,7 @@ jobs:
     - name: Build dxf2png
       run: |
         cd dxf2png
-        docker build --rm -t dxf2png .
+        make
     - name: Convert DXF to PNG
       run: |
         mkdir -p all_preview
@@ -24,5 +24,5 @@ jobs:
           filename=$(basename -- "$f")
           extension="${filename##*.}"
           filename="${filename%.*}"
-          ./convert.sh "$f" "all_preview/${filename}.png"
+          ./dxf2png -o "all_preview/${filename}.png" "$f"
         done
