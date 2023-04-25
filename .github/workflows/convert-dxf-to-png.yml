@@ -11,11 +11,12 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-    - name: Install Rust and dxf2image crate
+    - name: Install Rust
       uses: actions-rs/toolchain@v1
       with:
         toolchain: stable
         components: rustfmt
+    - name: Install dxf2image crate
       run: cargo install dxf2image
     - name: Convert DXF to PNG
       run: |
