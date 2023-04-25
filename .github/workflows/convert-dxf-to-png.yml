@@ -1,24 +1,31 @@
-name: Convert DXF files to images
+name: Convert DXF to PNG
 
-on: [push]
+on:
+  push:
+    paths:
+      - 'all_dxf/**'
 
 jobs:
-  convert_dxf_to_img:
+  convert:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
 
-    - name: Install dependencies
-      run: pip install ezdxf matplotlib
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-    - name: Convert DXF files to images
-      run: python dxf2img.py
+      - name: Convert DXF to PNG
+        run: python convert_dxf_to_png.py
 
-    - name: Move images to preview folder
-      run: mv *.png all_preview/
+      - name: Move PNG files to all_preview folder
+        run: |
+          mkdir all_preview
+          mv *.png all_preview/
