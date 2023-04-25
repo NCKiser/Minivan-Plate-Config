@@ -17,7 +17,7 @@ jobs:
         toolchain: stable
         components: rustfmt
     - name: Install dxf2image crate
-      run: cargo install dxf2image
+      run: cargo add dxf2image@0.1.0
     - name: Convert DXF to PNG
       run: |
         for f in all_dxf/*.dxf; do
