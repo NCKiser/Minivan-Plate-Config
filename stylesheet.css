@@ -41,4 +41,5 @@ body {
 img#image-preview {
     width: 800px;
     margin-bottom: 40px;
+    transform: rotate(180deg);
 }

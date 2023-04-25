@@ -75,21 +75,19 @@
   </body>
   <script>
     function dropdown_update(){
-      var layout_sel = document.getElementById("Layout");
-      var case_sel = document.getElementById("Case");
-      var selection = layout_sel.value + "_" + case_sel.value + ".dxf"
-      var dxf_url = "all_dxf/"+selection
+      let layout_sel = document.getElementById("Layout");
+      let case_sel = document.getElementById("Case");
+      let selection = `${layout_sel.value}_${case_sel.value}.dxf`;
+      let dxf_url = `all_dxf/${selection}`;
       console.log(selection);
-      if (LinkCheck(dxf_url)==true) {
+      if (LinkCheck(dxf_url)===true) {
       //if (true) {
-        document.getElementById("Download").setAttribute('href', dxf_url);
-        document.getElementById("Download").setAttribute('style', "");
-        document.getElementById("Download").innerHTML = "<button class=\"download_enabled\">Download "+selection+"</button>";
+        document.getElementById("Download").setAttribute('href', dxf_url, 'style', "");
+        document.getElementById("Download").innerHTML = `<button class="download_enabled">Download ${selection}</button>`;
         document.getElementById('image-preview').setAttribute('src', getPreview(layout_sel.value, case_sel.value));
       } else {
-        document.getElementById("Download").setAttribute('href', "/");
-        document.getElementById("Download").setAttribute('style', "pointer-events: none;");
-        document.getElementById("Download").innerHTML = "<button class=\"download_disabled\">File Not Available</button>";
+        document.getElementById("Download").setAttribute('href', '/', 'style', 'pointer-events: none;');
+        document.getElementById("Download").innerHTML =  `<button class="download_disabled">File Not Available</button>`;
         document.getElementById('image-preview').setAttribute('src', getPreview());
       }
     }
