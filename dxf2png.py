@@ -2,31 +2,30 @@ import ezdxf
 import argparse
 import os
 
-def convert_dxf_to_png(input_file, output_file):
+def convert_dxf_to_png(input_file, output_file, width=800):
     dxf = ezdxf.readfile(input_file)
     modelspace = dxf.modelspace()
+    extmax = dxf.header['$EXTMAX']
+    extmin = dxf.header['$EXTMIN']
+    x_min, y_min = extmin[0], extmin[1]
+    x_max, y_max = extmax[0], extmax[1]
+    width = int(width)
+    height = int(width * ((y_max-y_min)/(x_max-x_min)))
+    if height < 1:
+        height = 1
+    msp = dxf.modelspace()
+    msp.transform_layout(msp.get_wcs_transformation() @ Matrix44.scale(sx=1.0, sy=1.0, sz=1.0))
+    fig = Figure()
+    ax = fig.add_axes([0, 0, 1, 1])
+    ax.set_xlim(x_min, x_max)
+    ax.set_ylim(y_min, y_max)
+    ax.axis('off')
+    ax.set_aspect('equal')
+    render = RenderContext(fig)
+    render.add(msp, by_layer=True)
+    result = Drawing.extract(render)
+    result.image().save(output_file)
 
-    if '$EXTMIN' in dxf.header:
-        x_min, y_min, _ = dxf.header['$EXTMIN']
-    else:
-        x_min, y_min = 0, 0
-
-    if '$EXTMAX' in dxf.header:
-        x_max, y_max, _ = dxf.header['$EXTMAX']
-    else:
-        x_max, y_max = 100, 100
-
-    # scale factor to fit drawing within a 1024x1024 image
-    scale_factor = 1024 / max(x_max - x_min, y_max - y_min)
-
-    # create a new DXF drawing with scaled entities
-    scaled_dxf = ezdxf.new('R2010')
-    msp = scaled_dxf.modelspace()
-    for entity in modelspace:
-        msp.add_entity(entity.copy().scale(scale_factor))
-
-    # save the drawing to a PNG file
-    scaled_dxf.saveas(output_file)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
