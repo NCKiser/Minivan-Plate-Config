@@ -5,6 +5,7 @@ from ezdxf.addons.drawing.matplotlib import MatplotlibBackend
 # import wx
 import glob
 import re
+import os
 
 
 class DXF2IMG(object):
@@ -13,7 +14,8 @@ class DXF2IMG(object):
     default_img_res = 300
     def convert_dxf2img(self, names, img_format=default_img_format, img_res=default_img_res):
         for name in names:
-            doc = ezdxf.readfile(name)
+            file_path = os.path.join('all_dxf', name)
+            doc = ezdxf.readfile(file_path)
             msp = doc.modelspace()
             # Recommended: audit & repair DXF document before rendering
             auditor = doc.audit()
@@ -38,3 +40,4 @@ class DXF2IMG(object):
 if __name__ == '__main__':
     first =  DXF2IMG()
     first.convert_dxf2img(['GT-010.DXF'],img_format='.png')
+
