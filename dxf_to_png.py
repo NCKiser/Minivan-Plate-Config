@@ -34,8 +34,7 @@ for dxf_file in os.listdir(input_dir):
     try:
         doc = ezdxf.readfile(dxf_path)
         msp = doc.modelspace()
-        bbox = msp.bounding_box()
-        ext = (bbox[0], bbox[1])
+        ext = msp.extents()
         width, height = int(abs(ext[0][0]-ext[1][0])), int(abs(ext[0][1]-ext[1][1]))
         img = Image.new('RGB', (width, height), color='white')
         img_draw = ImageDraw.Draw(img)
