@@ -2,7 +2,7 @@ name: Convert DXF to PNG
 on:
   push:
     paths:
-      - '${{ github.workspace }}/*.dxf'
+      - 'all_dxf/*.dxf'
 
 jobs:
   convert:
@@ -15,7 +15,7 @@ jobs:
       - name: Convert DXF to PNG
         run: |
           mkdir -p converted
-          for file in ${{ github.workspace }}/*.dxf; do
+          for file in ${{ github.workspace }}/all_dxf/*.dxf; do
             if [ -f "$file" ]; then
               convert -density 150 "$file" "converted/${file%.dxf}.png"
             fi
