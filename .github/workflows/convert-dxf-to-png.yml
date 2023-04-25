@@ -1,7 +1,8 @@
 name: Convert DXF to PNG
+
 on:
   push:
-    branches: [main]
+    branches: [ main ]
 
 jobs:
   convert:
@@ -9,11 +10,22 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-    - name: Install dependencies
+    - name: Install Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+    - name: Install required packages
       run: |
-        sudo apt-get update
-        sudo apt-get install -y python3-pip
-        pip3 install dxfgrabber Pillow
+        pip install ezdxf
+        pip install Pillow
     - name: Convert DXF to PNG
       run: |
-        python3 dxf2png.py
+        mkdir -p all_preview
+        for f in all_dxf/*.dxf; do
+          filename=$(basename "$f" .dxf)
+          if [ ! -f "all_preview/${filename}.png" ]; then
+            python dxf2png.py "$f" "all_preview/${filename}.png"
+          else
+            echo "File all_preview/${filename}.png already exists, skipping."
+          fi
+        done
