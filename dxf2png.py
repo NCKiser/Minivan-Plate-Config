@@ -29,6 +29,3 @@ def dxf_to_png(dxf_path, png_path):
     
     # Save the image as a PNG file
     img.save(png_path)
-
-# Example usage:
-dxf_to_png("example.dxf", "example.png")
