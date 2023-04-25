@@ -17,7 +17,7 @@ jobs:
         pip install ezdxf pillow
     - name: Convert DXF to PNG
       run: |
-        python dxf_to_png.py all_dxf all_preview # Run the Python script, passing in the input and output directories
+        python dxf2png.py all_dxf all_preview # Run the Python script, passing in the input and output directories
       env:
         INPUT_DIR: all_dxf
         OUTPUT_DIR: all_preview
@@ -27,6 +27,6 @@ jobs:
         find ${{ env.INPUT_DIR }} -name '*.dxf' | while read dxf_file; do
           png_file="${{ env.OUTPUT_DIR }}/${dxf_file##*/}.png" # Construct the PNG file name based on the DXF file name
           if [ ! -f "$png_file" ]; then # Skip the file if the PNG file already exists
-            python dxf_to_png.py "$dxf_file" "$png_file"
+            python dxf2png.py "$dxf_file" "$png_file"
           fi
         done
