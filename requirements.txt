@@ -1,2 +1,0 @@
-matplotlib==3.5.1
-ezdxf==0.16.5
