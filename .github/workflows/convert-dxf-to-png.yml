@@ -28,10 +28,14 @@ jobs:
     - name: Convert DXF files to PNG
       run: python convert_dxf_to_png.py all_dxf --img-format png --img-res 300
 
-    - name: Commit PNG files
+    - name: Check if there are changes to commit
       run: |
-        git config --global user.email "github-actions@github.com"
-        git config --global user.name "GitHub Actions"
-        git add all_preview/
-        git commit -m "Convert DXF files to PNG"
-        git push
+        if [[ -n $(git status -s all_preview/) ]]; then
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git add all_preview/
+          git commit -m "Convert DXF files to PNG"
+          git push
+        else
+          echo "No changes to commit"
+        fi
