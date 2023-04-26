@@ -60,7 +60,7 @@ class DXF2IMG(object):
                     Frontend(ctx, out).draw_layout(msp, finalize=True)
 
                     fig.savefig(img_file, dpi=self.img_res)
-                    logging.info(f"Converted {dxf_file} to {img_file}")
+                    logging.info(f"Converted {dxf_file} to {img_file[:-3]}")
             except Exception as e:
                 logging.error(f"Error converting {dxf_file}: {e}")
 
