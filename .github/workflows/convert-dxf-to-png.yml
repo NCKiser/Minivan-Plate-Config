@@ -26,12 +26,12 @@ jobs:
         pip install ezdxf matplotlib
 
     - name: Convert DXF files to PNG
-      run: python convert_dxf_to_png.py all_dxf --img-res 300
+      run: python convert_dxf_to_png.py all_dxf --img-format png --img-res 300
 
     - name: Commit PNG files
       run: |
         git config --global user.email "github-actions@github.com"
         git config --global user.name "GitHub Actions"
-        git add /all_preview/
+        git add all_preview/
         git commit -m "Convert DXF files to PNG"
         git push
