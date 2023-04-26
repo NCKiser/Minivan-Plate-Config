@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import ezdxf
 from ezdxf.addons.drawing import RenderContext, Frontend
 from ezdxf.addons.drawing.matplotlib import MatplotlibBackend
+from ezdxf.addons.drawing.properties import Properties, LayoutProperties
 
 logging.basicConfig(level=logging.INFO)
 
@@ -52,13 +53,15 @@ class DXF2IMG(object):
                 if len(auditor.errors) != 0:
                     logging.error(f"{dxf_file} is damaged and can't be converted!")
                 else:
+
                     fig = plt.figure()
-                    ax = fig.add_axes([0, 0, 1, 1])
                     ctx = RenderContext(doc)
-                    ctx.set_current_layout(msp)
-                    # ctx.current_layout.set_colors(bg='#FFFFFF')
-                    out = MatplotlibBackend(ax)
-                    Frontend(ctx, out).draw_layout(msp, finalize=True)
+                    # Better control over the LayoutProperties used by the drawing frontend
+                    layout_properties = LayoutProperties.from_layout(msp)
+                    layout_properties.set_colors(bg='#FFFFFF')
+                    ax = fig.add_axes([0, 0, 1, 1])
+                    out = MatplotlibBackend(ax, params={"lineweight_scaling": 0.1})
+                    Frontend(ctx, out).draw_layout(msp,layout_properties=layout_properties, finalize=True)
 
                     fig.savefig(img_file, dpi=self.img_res)
                     logging.info(f"Converted {dxf_file} to {img_file}")
