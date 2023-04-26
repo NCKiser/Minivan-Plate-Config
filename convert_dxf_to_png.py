@@ -62,6 +62,8 @@ class DXF2IMG(object):
 
                     fig.savefig(img_file, dpi=self.img_res)
                     logging.info(f"Converted {dxf_file} to {img_file}")
+                    plt.close(fig)
+                    logging.info(f"Closed plot figure {img_file}")
             except Exception as e:
                 logging.error(f"Error converting {dxf_file}: {e}")
 
