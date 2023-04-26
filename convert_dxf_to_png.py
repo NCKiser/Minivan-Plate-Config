@@ -23,7 +23,7 @@ class DXF2IMG(object):
                 continue
             
             dxf_file = os.path.join(dxf_path, filename)
-            img_file = os.path.join(preview_path, os.path.splitext(filename)[0] + self.img_format)
+            img_file = os.path.join(preview_path, os.path.splitext(filename)[0] + "." + self.img_format)
             
             if os.path.isfile(img_file):
                 logging.warning(f"{img_file} already exists, skipping")
