@@ -1,0 +1,108 @@
+<html>
+  <head>
+    <title>MiniVanPlate.xyz</title>
+    <link rel="stylesheet" href="stylesheet.css">
+  </head>
+  <body>
+
+    <br>
+    <br>
+
+    <header>
+      <a href="/" class="download"><button class="other_page">MiniVan</button></a>
+      <a href="vanagon.html" class="download" style="pointer-events: none;"><button class="active_page">V4N4G0N</button></a>
+    </header>
+    
+    <br>
+    <br>
+
+    <label for="Layout">Choose a PCB/Layout:</label>
+
+    <br>
+
+    <select name="Layout" id="Layout" onchange="dropdown_update()">
+      <option value="V4N_Monorail_Universal" selected="selected">Monorail Universal (all layouts)</option>
+      <option value="V4N_Monorail_Diesel">&emsp;Monorail Diesel</option>
+      <option value="V4N_Monorail_Jet">&emsp;Monorail Jet</option>
+      <option value="V4N_Monorail_Steam">&emsp;Monorail Steam</option>
+    </select>
+
+    <br>
+    <br>
+
+    <label for="Case">Choose a Mount/Case:</label>
+
+    <br>
+
+    <select name="Case" id="Case" onchange="dropdown_update()">
+      
+      <option value="Vanagon">V4N4G0N R1/R2</option>
+      <option value="Hullagon">V4N4G0N R3 (Hullagon)</option>
+      <option value="Embrace" selected="selected">Embrace</option>
+    </select>
+
+    <br>
+    <br>
+
+    <div>
+      <h4><span id="no-image-preview" style="display: none">No</span> Preview</h4>
+      <img id="image-preview" />
+    </div>
+
+    <header>
+      <a href="all_dxf/" id="Download" class="download"></a>
+    </header>
+
+    <br>
+    <br>
+
+    <p>Disclaimer: Plate files on MiniVanPlate.xyz do not guarantee PCB and Case compatibility.
+    <br>Please check the <a href="https://docs.google.com/spreadsheets/d/1Uy4UFVSBKyFiH-ic7HVXPmtVq5I_d5Kx8xSe_stobGY/edit?usp=sharing">MiniVan Compatibility Matrix</a> for your PCB and Case combination.
+    <br>This site is Open-Source. Feedback and PR's are welcome. <a href="https://github.com/NCKiser/Minivan-Plate-Config/">GitHub.com</a></p>
+    
+
+    </p>
+  </body>
+  <script>
+    function dropdown_update(){
+      let layout_sel = document.getElementById("Layout");
+      let case_sel = document.getElementById("Case");
+      let selection = `${layout_sel.value}_${case_sel.value}.dxf`;
+      let dxf_url = `all_dxf/${selection}`;
+      console.log(selection);
+      if (LinkCheck(dxf_url)===true) {
+      //if (true) {
+        document.getElementById("Download").setAttribute('href', dxf_url, 'style', "");
+        document.getElementById("Download").innerHTML = `<button class="download_enabled">Download ${selection}</button>`;
+        document.getElementById('image-preview').setAttribute('src', getPreview(layout_sel.value, case_sel.value));
+      } else {
+        document.getElementById("Download").setAttribute('href', '/', 'style', 'pointer-events: none;');
+        document.getElementById("Download").innerHTML =  `<button class="download_disabled">File Not Available</button>`;
+        document.getElementById('image-preview').setAttribute('src', getPreview());
+      }
+    }
+
+    function LinkCheck(url)
+    {
+      var http = new XMLHttpRequest();
+      http.open('HEAD', url, false);
+      http.send();
+      console.log(http.status!=404)
+      return http.status!=404;
+    }
+
+    function getPreview(layout_sel, case_sel){
+      if (layout_sel && case_sel) {
+        document.getElementById('image-preview').style.display = '';
+        document.getElementById('no-image-preview').style.display = 'none';
+        let selection = `all_preview/${layout_sel}_${case_sel}.png`
+        return LinkCheck(selection) ? selection : 'https://placehold.co/800x200/white/grey?text=No Preview Available';
+      } else {
+        document.getElementById('image-preview').style.display = 'none';
+        document.getElementById('no-image-preview').style.display = '';
+      }
+    }
+
+    dropdown_update()
+  </script>
+</html>

@@ -1,5 +1,5 @@
 select, button {
-    display: block;
+    display: inline-block;
     margin: 0 auto;
     border-radius: 10px;
     padding: 10px;
@@ -29,13 +29,32 @@ button.download_disabled {
     cursor: default;
 }
 
+button.active_page {
+    width: 200px;
+    color: white;
+    background-color: #4CAF50;
+}
+
+button.other_page {
+    width: 200px;
+    color: black;
+    background-color: white;
+    border-style: solid;
+    border-width: 1px;
+    cursor: pointer;
+}
+
+button.other_page:hover {
+    background-color: #bbbbbb;
+}
+
 a.download {
     text-decoration:none;
 }
 
 body {
     text-align: center;
-    margin: 5% auto;
+    margin: auto;
 }
 
 img#image-preview {
