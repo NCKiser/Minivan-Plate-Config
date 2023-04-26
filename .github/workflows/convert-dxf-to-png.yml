@@ -26,7 +26,7 @@ jobs:
         pip install ezdxf matplotlib
 
     - name: Convert DXF files to PNG
-      run: python convert_dxf_to_png.py all_dxf --img-format png --img-res 300
+      run: python convert_dxf_to_png.py all_dxf --img-res 300
 
     - name: Commit PNG files
       run: |
