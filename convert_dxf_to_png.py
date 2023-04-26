@@ -60,7 +60,7 @@ class DXF2IMG(object):
                     layout_properties = LayoutProperties.from_layout(msp)
                     layout_properties.set_colors(bg='#FFFFFF')
                     ax = fig.add_axes([0, 0, 1, 1])
-                    out = MatplotlibBackend(ax, params={"lineweight_scaling": 0.1})
+                    out = MatplotlibBackend(ax)
                     Frontend(ctx, out).draw_layout(msp,layout_properties=layout_properties, finalize=True)
 
                     fig.savefig(img_file, dpi=self.img_res)
