@@ -33,8 +33,6 @@ button.active_page {
     width: 200px;
     color: white;
     background-color: #4CAF50;
-    border-style: solid;
-    border-width: 1px;
 }
 
 button.other_page {
